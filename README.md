@@ -1,9 +1,9 @@
-# FengfengBlog
+# 小叶博客
 
 🌍
 [简体中文](README.md)
 
-基于`python3.6.8`和`Django3.2.10`的博客。
+基于`python3.7`和`Django4.2.3`的博客。
 
 
 ## 主要功能：

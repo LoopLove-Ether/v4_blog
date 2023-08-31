@@ -1,0 +1,523 @@
+@import "./pager";
+
+a {
+  color: var(--font_2);
+}
+
+//card是上下排布,title是左右排布
+.card {
+
+  .title {
+    border-radius: 5px 5px 0 0; //圆角
+    display: flex;
+    justify-content: space-between; //两端对齐
+    align-items: center; //垂直居中
+    border-bottom: 1px solid var(--bg); //下边框作为分隔线
+    padding: 20px 20px 10px 20px;
+    background-color: var(--card_bg);
+
+    h4 {
+      font-size: 20px;
+    }
+
+    > div {
+      a {
+        font-size: 14px;
+      }
+    }
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+  }
+
+  .body {
+    padding: 10px 20px 20px 20px;
+    background-color: var(--card_bg);
+    border-radius: 0 0 5px 5px;
+  }
+}
+
+#app {
+  width: 100%;
+
+  .main {
+    width: 1200px;
+    min-height: 200px;
+    display: flex;
+    justify-content: space-between; //两边对齐
+    //为每个div添加下边距
+    > div > div {
+      margin-bottom: 20px;
+    }
+
+    .left {
+      width: 69%;
+
+      .boutique_article > .title {
+        .switch_article_category {
+          span {
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s;
+
+            &:hover {
+              color: var(--active);
+            }
+
+            &[active] {
+              color: var(--active);
+            }
+          }
+        }
+      }
+
+      .boutique_article > .body {
+
+        padding: 0 20px 0 20px;
+
+        > ul {
+          margin-top: 0;
+          display: flex;
+          flex-wrap: wrap; //可以换行
+          > li {
+            width: 50%;
+            box-sizing: border-box;
+            display: flex;
+            padding: 10px 0 10px 0;
+
+            &:nth-child(1), &:nth-child(3), &:nth-child(5) {
+              border-right: 2px solid var(--bg);
+              padding: 10px 10px 10px 0;
+            }
+
+            &:nth-child(2), &:nth-child(4), &:nth-child(6) {
+              padding: 10px 0 10px 10px;
+            }
+
+            &:nth-child(1), &:nth-child(2), &:nth-child(3), &:nth-child(4) {
+              border-bottom: 2px solid var(--bg);
+            }
+
+
+            .left {
+              width: 40%;
+
+              > div {
+                width: 100%;
+                height: 90px;
+                overflow: hidden;
+                border-radius: 5px;
+              }
+
+              img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: all 0.3s;
+
+                &:hover {
+
+                  transform: scale(1.1);
+                }
+              }
+            }
+
+            .right {
+              width: 60%;
+              box-sizing: border-box;
+              padding-left: 10px;
+              display: flex;
+              flex-direction: column; //纵向排列
+              justify-content: space-between; //两端对齐
+
+              h2 {
+                font-size: 20px;
+              }
+
+              //单行文字截断
+              p {
+                white-space: nowrap; //元素内的文本不换行,始终保持单行显示
+                overflow: hidden; //内容超出容器尺寸时,隐藏溢出的部分
+                text-overflow: ellipsis; //使用省略号代替被截断的文本
+              }
+
+              span {
+                font-size: 14px;
+                color: var(--font_2);
+
+              }
+            }
+          }
+        }
+      }
+
+      .hotList > .body {
+        > div {
+          display: flex;
+          font-size: 14px;
+
+          .index {
+            width: 20px;
+            border-radius: 5px;
+            color: #333333;
+            display: flex;
+            margin-right: 20px;
+          }
+
+          a {
+            width: 77%;
+            color: var(--active);
+          }
+
+          .num {
+            width: 20%;
+            display: flex;
+            justify-content: right;
+          }
+        }
+      }
+
+      .all_article > .body {
+        background-color: transparent;
+        padding: 0;
+
+        > .article_content {
+          width: 100%;
+
+          > li {
+            width: 100%;
+            display: flex; //横向布局的前提
+            background-color: var(--card_bg);
+            margin-bottom: 20px;
+            border-radius: 5px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+
+            &:first-child {
+              border-radius: 0 0 5px 5px;
+
+              .left {
+                padding: 10px 10px 10px 20px; //上右下左
+              }
+
+              .right {
+                padding: 10px 10px 10px 20px; //上右下左
+              }
+            }
+
+            &:not(&:first-child):hover {
+              transform: translateY(-10px);
+              box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+            }
+
+            .left {
+              width: 30%;
+              box-sizing: border-box;
+              padding: 20px 10px 10px 20px; //上右下左
+              > div {
+                width: 100%;
+                height: 100%;
+                border-radius: 5px;
+                overflow: hidden; //超出left初始宽度的元素会被隐藏
+              }
+
+              img {
+                width: 100%;
+                height: 100%;
+                transition: all 0.3s; //为所有效果设置过渡时间
+                //添加悬浮放大
+                &:hover {
+                  transform: scale(1.1); //缩放1.1倍
+                }
+              }
+            }
+
+            .right {
+              width: 70%;
+              padding: 20px 20px 10px 10px;
+
+              position: relative; //相对定位
+              > h2 {
+                font-size: 23px;
+                margin-bottom: 5px;
+              }
+
+              p {
+                display: -webkit-box; //设置为弹性盒子布局
+                -webkit-box-orient: vertical; //指定主轴方向为垂直方向
+                -webkit-line-clamp: 2; //限制文本最多显示两行,超过两行的会被隐藏
+                overflow: hidden; //内容超出容器尺寸时,隐藏溢出的部分
+                text-overflow: ellipsis; //使用省略号代替被截断的文本
+                margin-bottom: 10px;
+              }
+
+              .article_info {
+                font-size: 14px;
+                color: var(--font_2);
+
+                > span {
+                  margin-right: 10px;
+
+                  i {
+                    margin-right: 5px;
+                  }
+
+                  i.show {
+                    color: var(--active);
+                  }
+                }
+              }
+
+              > a {
+                width: 100px;
+                height: 30px;
+                background-color: var(--font_2);;
+                position: absolute; //绝对定位
+                right: 20px;
+                bottom: 5px;
+                border: none;
+                color: var(--card_bg);
+                display: flex;
+                justify-content: center; //水平居中
+                align-items: center; //垂直居中
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 14px;
+              }
+            }
+
+            .category_flag {
+              position: absolute;
+              color: white;
+              top: 9px;
+              right: -79px;
+              width: 200px;
+              height: 20px;
+              font-size: 14px;
+              background-color: var(--font_del);
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              transform: rotate(45deg); //deg是角度的意思
+
+              &[type="前端"] {
+                background-color: var(--active);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .right {
+      width: 30%;
+
+      .advertisement > .body {
+        padding: 20px;
+        height: 240px;
+
+        .adv_img_list {
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+        }
+      }
+
+      .tags > .body {
+        position: relative;
+
+        ul {
+          padding: 0;
+          margin: 0;
+          display: flex;
+          flex-wrap: wrap; //允许换行
+          margin-top: 10px;
+
+          //循环动画(使用keyframes关键帧)
+          //ul的伪元素
+          @keyframes move_box {
+            //定义动画的四个位置
+            0% {
+              left: 0;
+              top: 0;
+            }
+            25% {
+              left: calc(100% - 20px);
+              top: 0;
+            }
+            50% {
+              top: calc(100% - 20px);
+              left: calc(100% - 20px);
+            }
+            75% {
+              top: calc(100% - 20px);
+              left: 0;
+            }
+            100% {
+              left: 0;
+              top: 0;
+            }
+          }
+
+          &::before {
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: block;
+            width: 20px;
+            height: 20px;
+            content: "";
+            background-color: var(--active);
+
+            -webkit-animation-name: move_box; //指定要使用的动画名称(兼容旧版本浏览器)
+            animation-name: move_box; //指定要使用的动画名称
+            -webkit-animation-duration: 5s; //指定动画持续时间
+            animation-duration: 5s; //指定动画持续时间
+            -webkit-animation-iteration-count: infinite; //指定动画循环次数("infinite"表示无限循环)
+            animation-iteration-count: infinite; //指定动画循环次数
+          }
+
+          li {
+            display: flex;
+            align-items: center; //垂直居中
+            justify-content: center; //水平居中
+            width: 33.33%;
+            height: 40px;
+            box-sizing: border-box;
+            //每3个为一组,选中奇数行
+            &:nth-child(6n+1), &:nth-child(6n+2), &:nth-child(6n+3) {
+              background-color: var(--bg);
+            }
+
+            //每2个为一组,选中前两列
+            &:nth-child(3n+1), &:nth-child(3n+2) {
+              border-right: 1px solid var(--bg_darken);
+            }
+
+            i {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              width: 20px;
+              height: 20px;
+              font-size: 10px;
+              color: var(--card_bg);
+              background-color: var(--active);
+              border-radius: 50%;
+              margin-left: 5px;
+            }
+          }
+        }
+      }
+
+      .site_info > .body {
+        .items {
+          margin-bottom: 10px;
+        }
+
+        .images {
+          display: flex;
+          margin-top: 10px;
+
+          > div {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+          }
+
+          img {
+            height: 100px;
+            border-radius: 5px;
+          }
+        }
+      }
+
+      .feedback > .body {
+        .el-input, .el-textarea {
+          margin-bottom: 10px;
+        }
+
+        .el-button {
+          width: 100%;
+        }
+      }
+
+      .links > .body {
+
+
+        ul {
+          display: flex;
+          flex-wrap: wrap;
+          width: 100%;
+
+          li {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            width: 50%;
+            height: 40px;
+          }
+        }
+      }
+    }
+
+
+  }
+}
+
+.dialog_content {
+  > div {
+
+    margin-bottom: 10px;
+
+    > label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .icon_href {
+      width: 70%;
+    }
+
+    .icon_img {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 30%;
+
+      img {
+        height: 40px;
+      }
+    }
+
+
+    .el-select {
+      width: 100%;
+    }
+  }
+}
+
+.el-select-dropdown__list {
+  li {
+    height: 60px;
+    display: flex;
+    align-items: center;
+
+    img {
+      height: 50px;
+      border-radius: 5px;
+    }
+  }
+
+  li.selected {
+    background-color: var(--bg);
+  }
+}

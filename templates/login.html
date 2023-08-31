@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% block title %}
+        <title>小叶博客|用户登录</title>
+    {% endblock %}
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="/static/elementui/theme-chalk/index.css">
+    <link rel="stylesheet" href="/static/my/css/reset.css">
+    <link rel="stylesheet" href="/static/my/css/login.css">
+</head>
+<body>
+<div id="app">
+    <main>
+        <div class="top">
+            <h2 class="title">
+                {% block main_title %}
+                    <a href="/login" class="active">登录</a> / <a href="/sign">注册</a>
+                {% endblock %}
+            </h2>
+            <div class="login_forms">
+                {% csrf_token %}
+                {% block form %}
+                    <input type="text" ref="login_form_name"  v-model="login_form.name" placeholder="请输入用户名/邮箱">
+                    <input type="password" ref="login_form_pwd" v-model="login_form.pwd" placeholder="请输入密码">
+                <div class="code">
+                    <input type="text" ref="login_form_code" v-model="login_form.code" placeholder="请输入验证码">
+                    <img @click="get_random_code" src="/static/my/img/login/code.png" alt="">
+                </div>
+                <button @click="login">登录</button>
+                {% endblock %}
+
+            </div>
+            <div class="other_login">
+                <p>其他登录方式</p>
+                <div>
+                    <img src="/static/my/img/login/qq_icon.svg" alt="">
+                    <img src="/static/my/img/login/wexin_icon.svg" alt="">
+                    <img src="/static/my/img/login/weibo_icon.svg" alt="">
+                </div>
+            </div>
+
+        </div>
+        <div class="bottom">
+            <img src="/static/my/img/login/fingerprint_login.svg">
+        </div>
+    </main>
+</div>
+<script src="/static/axios/axios.min.js"></script>
+<script src="/static/vue/vue.js"></script>
+<!-- 引入组件库 -->
+<script src="/static/elementui/index.js"></script>
+<script>
+    //配置请求中间件
+    axios.interceptors.request.use(request=>{
+        if(request.method === 'post'){
+            //将csrf_token验证机制发放的随机字符串添加到axios请求头中
+            let csrftoken = document.querySelector('input[name="csrfmiddlewaretoken"]').value
+            request.headers['X-CSRFToken'] = csrftoken
+        }
+        return request
+    })
+
+    //配置响应中间件
+    axios.interceptors.response.use(response=>{
+        return response.data
+    })
+
+    new Vue({
+        el:'#app',
+        data:{
+            login_form:{
+                name:'',
+                pwd:'',
+                code:'',
+            },
+            sign_form:{
+                name:'',
+                pwd:'',
+                re_pwd:'',
+                code:'',
+            }
+        },
+        methods:{
+            login(){
+                {#axios的post请求#}
+{#  第一个参数是请求的路径,第二个参数是post请求发送的数据,第三个参数用于配置请求头(可不写) #}
+{#  通过.then的方式获得后端传回来的数据 #}
+                axios.post('/api/login/',this.login_form).then(res=>{
+                    if(res.code){
+                        //验证失败
+                        this.$message.error(res.msg)
+                        this.$refs[`login_form_${res.self}`].focus()
+                        return
+                    }
+                    //验证成功
+                     this.$message.success(res.msg)
+                    //1s后跳转至主页
+                    setTimeout(()=>{
+                        location.href = '/'
+                    },1000)
+                })
+            },
+
+            sign(){
+                axios.post('/api/sign/',this.sign_form).then(res=>{
+                    if(res.code){
+                        //验证失败
+                        this.$message.error(res.msg)
+                        this.$refs[`sign_form_${res.self}`].focus()
+                        return
+                    }
+                    //验证成功
+                    this.$message.success(res.msg)
+                    //1s后跳转至主页
+                    setTimeout(()=>{
+                        location.href = '/'
+                    },1000)
+                })
+            },
+
+            get_random_code(e){
+                let date = new Date().getTime()
+                e.target.src = '/login/random_code/?timestamp='+date //修改img元素的src,有了时间戳之后,就可以切换图片验证码了
+            },
+        }
+    })
+</script>
+</body>
+</html>

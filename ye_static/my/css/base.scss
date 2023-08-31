@@ -1,0 +1,417 @@
+nav {
+  width: 100%; //计算出正确的宽度,避免滚动条
+  height: 60px;
+  //background-color: var(--nav_bg);
+  display: flex; //弹性容器
+  align-items: center; //垂直居中
+  padding: 0 120px; //左右60px的判定
+  position: fixed; //固定定位
+  z-index: 100; //控制元素在堆叠顺序中的权重
+  top: 0;
+  left: 0;
+  transition: all 0.3s;
+
+  .left {
+    width: 60%;
+  }
+
+  .right {
+    width: 40%;
+    display: flex;
+    justify-content: right; //向右对齐
+    img {
+      width: 20px;
+      margin-right: 15px;
+      cursor: pointer;
+    }
+
+    .el-dropdown {
+      color: var(--card_bg);
+
+      span {
+        cursor: pointer;
+      }
+    }
+  }
+
+  //导航栏的所有a标签之间应有间距
+  a {
+    margin-right: 15px;
+    color: var(--card_bg);
+
+    //将默认的margin置0
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  a.active {
+    color: var(--active);
+  }
+}
+
+nav.show {
+  background-color: var(--card_bg);
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+
+  a {
+    color: var(--font_1);
+  }
+
+  a.active {
+    color: var(--active);
+  }
+
+  .el-dropdown {
+    color: var(--font_1);
+  }
+}
+
+header {
+  width: 100%;
+  height: 500px;
+  position: relative;
+
+  .title {
+    position: absolute;
+    left: 50%;
+    top: 50%; //居中对齐
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    color: white;
+
+    h1 {
+      font-size: 30px;
+      font-weight: 400;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 10px;
+      text-align: center;
+    }
+  }
+
+  > .dynamic_shuffl {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; //超出部分隐藏掉
+    transition: opacity 1s; //淡入淡出效果,过渡时间为1s钟
+
+    opacity: 0; //完全透明
+
+    &:nth-child(2) {
+      opacity: 1;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; //中心居中
+    }
+  }
+}
+
+main {
+  width: 100%; //计算实时宽度
+  padding: 20px 120px;
+  min-height: 600px;
+  background-color: var(--bg);
+  color: var(--font_1);
+  display: flex;
+  justify-content: center; //确保main的div块水平居中
+
+}
+
+.el-dropdown-menu {
+  a {
+    color: var(--font_1);
+  }
+}
+
+// 底部信息栏
+footer {
+  width: 100%;
+  display: flex; //flex布局使其左右排布
+  height: 180px;
+  background-color: var(--card_bg);
+  color: var(--footer_color);
+  font-size: 14px;
+
+  .left, .right {
+    width: 50%;
+    display: flex;
+    flex-direction: column; //纵向排布
+    justify-content: center; //水平居中
+    align-items: center; //垂直居中
+  }
+
+  .thank {
+    color: #26c6e1;
+    font-size: 20px;
+  }
+
+  .site_info {
+    display: flex; //浮动布局
+
+    span {
+      color: var(--font_3);
+      margin-right: 10px; //右间距+10px
+      display: flex;
+      align-items: center; //垂直居中
+    }
+
+    img {
+      width: 20px;
+      margin-right: 5px;
+    }
+  }
+
+  .version {
+    display: flex; //将span样式变为盒子
+    //span原来属于行内样式,行内样式不能设置高度
+    span {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--font_3);
+      background-color: #333;
+      height: 30px;
+      width: 60px;
+      //伪类选择器
+      &:nth-child(1) {
+        background-color: #ff9800;
+        border-radius: 5px 0 0 5px; //圆角(左上,右上,右下,左下)
+      }
+
+      &:nth-child(2) {
+        background-color: #26c6da;
+        border-radius: 0 5px 5px 0; //圆角(左上,右上,右下,左下)
+      }
+    }
+  }
+
+  .jianzhan {
+    color: var(--font_3);
+  }
+
+  .beian {
+    a {
+      display: flex;
+      align-item: center;
+    }
+  }
+
+  p {
+    margin: 0;
+    margin-top: 10px;
+  }
+
+  .contact {
+    margin-top: 0;
+    display: flex;
+    width: 300px;
+    justify-content: space-between; //将容器内的子元素沿水平方向进行排列，并且在每个子元素之间创建等距空白间隔。
+    color: var(--font_3);
+
+    > div {
+      position: relative;
+
+      .qq {
+        width: 80px;
+        position: absolute;
+        top: -30px;
+        left: -20px;
+        transition: all 0.4s; //过渡时间为0.4s钟
+        opacity: 0;
+      }
+    }
+
+    .svg {
+      width: 40px;
+      cursor: pointer;
+      position: relative;
+      z-index: 1;
+      //触摸
+      &:hover {
+        //兄弟选择器
+        & ~ .qq {
+          top: -83px;
+          left: -20px;
+          opacity: 1;
+        }
+      }
+    }
+  }
+}
+
+// 导航条搜索
+nav .search {
+  display: inline-flex;
+
+  input {
+    width: 0;
+    height: 40px;
+    border: none;
+    outline: none;
+    padding: 0;
+    transition: all 0.3s;
+  }
+
+  button {
+    color: var(--card_bg);
+    border: none;
+    background-color: transparent;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+}
+
+nav.show .search {
+  button {
+    color: var(--font_1);
+  }
+}
+
+nav .show_search {
+  input {
+    width: 200px;
+    border-radius: 5px 0 0 5px;
+    padding-left: 10px;
+    background-color: rgba(var(--card_bg), 0.5);
+  }
+
+  button {
+    width: 40px;
+    background-color: rgba(var(--card_bg), 0.5);
+    border-radius: 0 5px 5px 0;
+    color: var(--font_1);
+  }
+}
+
+nav.show .show_search {
+  input {
+    border: 1px solid var(--bg);
+  }
+
+  button {
+    border-color: var(--bg);
+    border-style: solid;
+    border-width: 1px 1px 1px 0;
+  }
+}
+
+.el-scrollbar__wrap {
+  overflow-x: hidden !important;
+}
+
+.el-textarea__inner {
+  color: var(--font_2);
+  background-color: var(--ele_bg);
+  border: 1px solid var(--bg_darken);
+}
+
+.el-textarea__inner::-webkit-input-placeholder {
+  color: var(--ele_placeholder)
+}
+
+.el-textarea__inner:-ms-input-placeholder {
+  color: var(--ele_placeholder)
+}
+
+.el-textarea__inner::-ms-input-placeholder {
+  color: var(--ele_placeholder)
+}
+
+.el-textarea__inner::placeholder {
+  color: var(--ele_placeholder)
+}
+
+.el-textarea__inner:hover {
+  border-color: var(--ele_placeholder)
+}
+
+.el-input__inner {
+  background-color: var(--ele_bg);
+  border: 1px solid var(--bg_darken);
+  color: #606266;
+}
+
+.el-input__prefix, .el-input__suffix {
+  color: var(--ele_placeholder);
+}
+
+.el-input__inner::-webkit-input-placeholder {
+  color: var(--ele_placeholder);
+}
+
+.el-input__inner:-ms-input-placeholder {
+  color: var(--ele_placeholder);
+}
+
+.el-input__inner::-ms-input-placeholder {
+  color: var(--ele_placeholder);
+}
+
+.el-input__inner::placeholder {
+  color: var(--ele_placeholder);
+}
+
+.el-input__inner:hover {
+  border-color: var(--ele_placeholder);
+}
+
+.el-dialog, .el-pager li {
+  background: var(--ele_bg);
+}
+
+.el-dialog__title {
+  color: var(--font_2);
+}
+
+.el-radio__inner {
+  border: 1px solid var(--bg_darken);
+  background-color: var(--ele_bg);
+}
+
+textarea.drawing {
+  width: 100%;
+  resize: none;
+  border: 1px solid var(--bg_darken);
+  outline: none;
+  background-color: var(--ele_bg);
+  border-radius: 5px;
+  padding: 5px 15px;
+  color: #606266;
+  font-size: 14px;
+  transition: all 0.2s;
+
+  &::-webkit-input-placeholder {
+    color: var(--ele_placeholder)
+  }
+
+  &:-ms-input-placeholder {
+    color: var(--ele_placeholder)
+  }
+
+  &::-ms-input-placeholder {
+    color: var(--ele_placeholder)
+  }
+
+  &::placeholder {
+    color: var(--ele_placeholder)
+  }
+
+  &:hover {
+    border-color: var(--ele_placeholder)
+  }
+
+  &:focus {
+    outline: 0;
+    border-color: #409eff;
+  }
+}

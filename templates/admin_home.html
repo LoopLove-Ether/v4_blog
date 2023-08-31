@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ch">
+<head>
+    <meta charset="UTF-8">
+    <title>后台看板</title>
+    <link rel="stylesheet" href="/static/my/css/admin_home.css">
+    <link rel="stylesheet" href="/static/viewer/css/viewer.css">
+    <link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<div id="app">
+    <h2>控制台</h2>
+    <p>用于展示当前系统中的统计数据，统计表及重要实时数据</p>
+    <div class="actions">
+        <span :class="menu === 'home' ? 'active item' : 'item'" @click="set_menu('home')">控制台</span>
+    </div>
+    <main class="home" v-show="menu==='home'">
+        <div class="title">
+            <div class="item tea">
+                <div class="left">
+                    <i class="fa fa-user-circle-o"></i>
+                </div>
+                <div class="right">
+                    <h3>{{ user_count }}</h3>
+                    <p>用户总数</p>
+                </div>
+            </div>
+            <div class="item yellow">
+                <div class="left">
+                    <i class="fa fa-share-alt-square"></i>
+                </div>
+                <div class="right">
+                    <h3>{{ article_count }}</h3>
+                    <p>文章总数</p>
+                </div>
+            </div>
+            <div class="item red">
+                <div class="left">
+                    <i class="fa fa-internet-explorer"></i>
+                </div>
+                <div class="right">
+                    <h3>{{ nav_count }}</h3>
+                    <p>网址总数</p>
+                </div>
+            </div>
+            <div class="item green">
+                <div class="left">
+                    <i class="fa fa-handshake-o"></i>
+                </div>
+                <div class="right">
+                    <h3>{{ link_count }}</h3>
+                    <p>友链总数</p>
+                </div>
+            </div>
+            <div class="item blue">
+                <div class="left">
+                    <i class="fa fa-pinterest-square"></i>
+                </div>
+                <div class="right">
+                    <h3>{{ mood_count }}</h3>
+                    <p>心情总数</p>
+                </div>
+            </div>
+        </div>
+        <div class="content">
+            <div class="charts" id="main">
+
+            </div>
+            <div class="data_s">
+                <div class="item">
+                    <span class="new">实时</span>
+                    <div class="left">
+                        <i class="fa fa-odnoklassniki-square"></i>
+                    </div>
+                    <div class="right">
+                        <h4>[[ online_count ]]</h4>
+                        <p>在线人数</p>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="left">
+                        <i class="fa fa-user"></i>
+                    </div>
+                    <div class="right">
+                        <h4>{{ today_sign }}</h4>
+                        <p>今日注册</p>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="left">
+                        <i class="fa fa-envelope"></i>
+                    </div>
+                    <div class="right">
+                        <h4>{{ email_count }}</h4>
+                        <p>发送邮件</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <div class="title">
+                小叶博客诗词赋
+            </div>
+            <div class="body">
+                [[ poetry.content ]]
+            </div>
+            <div class="info">
+                [[ poetry.info ]]
+            </div>
+            <div class="in_word">
+                <button :class="btn_status ? '' : 'no_active'" @click="reset_word">换一句</button>
+            </div>
+        </div>
+    </main>
+
+</div>
+<script src="/static/vue/vue.js"></script>
+<script src="/static/echarts/echarts.js"></script>
+<script src="/static/poetry/poetry.js" charset="utf-8"></script>
+<script src="/static/jquery/jquery.min.js"></script>
+<script src="/static/viewer/js/viewer.js"></script>
+
+
+<script>
+
+    function randomNum(minNum, maxNum) {
+        switch (arguments.length) {
+            case 1:
+                return parseInt(Math.random() * minNum + 1, 10);
+                break;
+            case 2:
+                return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10);
+                break;
+            default:
+                return 0;
+                break;
+        }
+    }
+
+    function init_echarts(seven_data) {
+        // -----------  echarts 配置 ----------- //
+
+        let chartDom = document.getElementById('main');
+        let myChart = echarts.init(chartDom);
+        let option;
+
+        // 配置信息
+        option = {
+            title: {
+                text: '七日用户活跃'
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    label: {
+                        backgroundColor: '#6a7985'
+                    }
+                }
+            },
+            legend: {
+                data: ['登录', '注册']
+            },
+            toolbox: {},
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: seven_data['date']
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            // 数据可以从后端去请求
+            series: [
+                {
+                    name: '登录',
+                    type: 'line',
+                    stack: 'Total',
+                    areaStyle: {},
+                    smooth: true,//设置折线图平滑
+                    emphasis: {
+                        focus: 'series'
+                    },
+                    data: seven_data['login_count']
+                },
+                {
+                    name: '注册',
+                    type: 'line',
+                    stack: 'Total',
+                    smooth: true,//设置折线图平滑
+                    areaStyle: {},
+                    emphasis: {
+                        focus: 'series'
+                    },
+                    data: seven_data['sign_count']
+                },
+            ]
+        };
+        option && myChart.setOption(option);
+        //根据浏览器的大小来改变大小
+        window.onresize = () => {
+            myChart.resize();
+        }
+    }
+
+    // 初始化七天内的数据
+    function init_seven_data() {
+        $.get('/api/get_seven_data/', res => {
+            init_echarts(res)
+        })
+    }
+
+    init_seven_data()
+    let timer = null;
+    new Vue({
+        el: '#app',
+        delimiters: ["[[", "]]"],
+        data: {
+            // 当前菜单
+            menu: 'home',
+            // 诗句
+            poetry: {
+                // 内容
+                content: '',
+                // 作者
+                info: '',
+            },
+            // 按钮是否可点击
+            btn_status: true,
+            // 获取时间距离现在的时间 几天前
+            getDateDiff(date) {
+                let dateTimeStamp = new Date(date).getTime()
+                let result = ''
+                let minute = 1000 * 60
+                let hour = minute * 60
+                let day = hour * 24
+                let month = day * 30
+                let now = new Date().getTime()
+                let diffValue = now - dateTimeStamp
+                if (diffValue < 0) return
+                let monthC = diffValue / month
+                let weekC = diffValue / (7 * day)
+                let dayC = diffValue / day
+                let hourC = diffValue / hour
+                let minC = diffValue / minute
+                if (monthC >= 1) {
+                    result = "" + parseInt(monthC) + "个月前"
+                } else if (weekC >= 1) {
+                    result = "" + parseInt(weekC) + "周前"
+                } else if (dayC >= 1) {
+                    result = "" + parseInt(dayC) + "天前"
+                } else if (hourC >= 1) {
+                    result = "" + parseInt(hourC) + "小时前"
+                } else if (minC >= 1) {
+                    result = "" + parseInt(minC) + "分钟前"
+                } else {
+                    result = "刚刚"
+                }
+                return result
+            },
+
+            online_count: 1,
+        },
+        created() {
+            // 调用诗句
+            this.reset_word()
+            // 初始化菜单选项
+            this.init_menu()
+        },
+        methods: {
+            // 初始化获取菜单
+            init_menu() {
+                let menu = localStorage.getItem('menu')
+                // 如果是home标签页，就去获取在线人数
+                if (menu === 'home') {
+                    this.init_online()
+                }
+                // 取出menu
+                if (menu) {
+                    this.menu = menu
+                }
+            },
+            // 选择菜单
+            set_menu(menu) {
+                this.menu = menu
+                if (menu === 'home') {
+                    // 如果是在其他页面，home里面的echarts的长度就有问题，需要重新去计算
+                    setTimeout(() => {
+                        myChart.resize()
+                    }, 200)
+                    // 获取在线人数
+                    this.init_online()
+                } else {
+                    // 清除这个获取在线人数的定时器
+                    clearInterval(timer)
+                }
+                // 设置进本地存储
+                localStorage.setItem('menu', menu)
+            },
+            // 获取每日诗句
+            reset_word() {
+                if (this.btn_status) {
+                    this.btn_status = false
+                    jinrishici.load((result) => {
+                        let poem = result.data.content;
+                        let info = "【" + result.data.origin.dynasty + "】" + result.data.origin.author + "《" + result.data.origin.title + "》";
+                        this.poetry.content = poem
+                        this.poetry.info = info
+                    })
+                }
+                setTimeout(() => {
+                    // 按下按钮需要4秒后才能点下一个
+                    this.btn_status = true
+                }, 4000)
+            },
+            // 获取在线人数
+            get_online() {
+                // 调用后台的地址
+                $.get('/api/get_online/', (res) => {
+                    this.online_count = res.data
+                })
+            },
+            // 初始化在线人数
+            init_online() {
+                // 需要先调用一次这个方法
+                this.get_online()
+                timer = setInterval(this.get_online, 8000)
+            },
+        },
+    })
+
+    $(function () {
+        $('.drawing').viewer();
+    })
+</script>
+</body>
+</html>

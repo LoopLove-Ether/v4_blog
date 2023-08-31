@@ -1,0 +1,74 @@
+{#继承admin原有的页面(来自simpleUI)#}
+{% extends 'admin/change_form.html' %}
+
+{% block field_sets %}
+    <style>
+        #menu_result {
+            width: 400px;
+            height: 300px;
+            position: absolute;
+            border: 1px solid #f0eeee;
+            border-radius: 5px;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        #menu_result::after {
+            content: '图片预览区域';
+            position: absolute;
+            display: block;
+            right: 10px;
+            bottom: 10px;
+            color: #888;
+        }
+
+        #menu_result img {
+            height: 50px;
+            border-radius: 5px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            margin-right: 5px;
+        }
+    </style>
+
+    <div id="menu_result">
+        <img :src="'/media/' + item" v-for="(item,index) in img_list" :key="index" alt="">
+    </div>
+
+    {% for fieldset in adminform %}
+        {% include "admin/includes/fieldset.html" %}
+    {% endfor %}
+
+    <script>
+        let option = $('#id_menu_url').offset() //寻找元素位置坐标 top:736 left:50
+        let menu_in_width = $('#id_menu_url').innerWidth() //元素自身宽度 width:158
+        option.left += menu_in_width
+        option.left += 500
+        option.top += 20
+        $('#menu_result').css(option) //为预览框设置坐标
+
+        let menu_vue = new Vue({
+            el: '#menu_result',
+            data: {
+                img_list: []
+            }
+        }) //将图标的url列表挂载到名为menu_vue的Vue对象上
+
+        function imgPush() {
+            let img_list = []
+            // 伪类选择器
+            let url_list = $('#id_menu_url option:selected')
+            for (const element of url_list) {
+                img_list.push(element.innerHTML)//获得发生改变的元素的url,接下来就是展示在界面上了
+            }
+            menu_vue.img_list = img_list
+        }
+
+        imgPush()
+        // 监听select元素的change事件
+        $('#id_menu_url').change(imgPush)
+    </script>
+
+{% endblock %}

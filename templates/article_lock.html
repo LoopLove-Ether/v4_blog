@@ -1,0 +1,66 @@
+{% extends 'article.html' %}
+
+{% block css %}
+    <style>
+        .article {
+            margin-top: 20px;
+            width: 400px;
+        }
+
+        .article > .title {
+            text-align: center;
+        }
+
+        .article > div {
+            margin-bottom: 10px;
+        }
+
+        .article > .el-button {
+            width: 100%;
+        }
+    </style>
+{% endblock %}
+
+{% block main %}
+    {#ref作为dom元素供vue方法使用#}
+    <div style="display: none" class="slider_bar" ref="slider">
+        <div class="title">
+            <span>[[ slide_text ]]</span>
+            <el-switch
+                    v-model="isShowSlider"
+                    active-color="#13ce66"
+                    inactive-color="#ff4949"
+                    @change="sliderChange"
+            >
+            </el-switch>
+        </div>
+        <div class="body">
+            <p :tagName="item.tagName" @click="go_side_bar(item.pos,$event)" v-for="(item,index) in slide_list"
+               :key="index">
+                [[ item.c ]]
+            </p>
+        </div>
+    </div>
+
+    <div class="article">
+        <div class="title">
+            该内容为VIP专享内容，若要查看，请输入密码!
+        </div>
+        <el-input
+                id="article_pwd"
+                placeholder="请输入文章密码"
+                v-model="article_pwd">
+
+        </el-input>
+        <el-button type="primary" @click="article_pwd_show('{{ article_obj.nid }}')">查看</el-button>
+    </div>
+{% endblock %}
+
+
+{% block article_js %}
+    <script>
+        setTimeout(() => {
+            $('.slider_bar').remove()
+        }, 301)
+    </script>
+{% endblock %}
